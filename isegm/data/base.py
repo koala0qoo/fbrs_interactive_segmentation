@@ -77,6 +77,15 @@ class ISDataset(torch.utils.data.dataset.Dataset):
 
         sample['objects_ids'] = [obj_id for obj_id, obj_info in sample['instances_info'].items()
                                  if not obj_info['ignore']]
+        prob_sum = 0
+        for obj_id, obj_info in sample['instances_info'].items():
+            if not obj_info['ignore']:
+                prob_sum += obj_info['prob']
+        for obj_id, obj_info in sample['instances_info'].items():
+            if not obj_info['ignore']:
+                obj_info['prob'] /= prob_sum
+        sample['probs'] = [obj_info['prob'] for obj_id, obj_info in sample['instances_info'].items()
+                                 if not obj_info['ignore']]
 
         points, masks = [], []
         self.points_sampler.sample_object(sample)

@@ -105,6 +105,10 @@ class MultiPointSampler(BasePointSampler):
             for x in masks[1:]:
                 mask = np.logical_or(mask, x)
         else:
+            # if 'probs' in dataset_sample:
+            #     random_id = np.random.choice(dataset_sample['objects_ids'], p=dataset_sample['probs'])
+            # else:
+            #     random_id = random.choice(dataset_sample['objects_ids'])
             random_id = random.choice(dataset_sample['objects_ids'])
             mask = dataset_sample['instances_mask'] == random_id
             self._selected_indices = [np.argwhere(self._positive_erode(mask))]
